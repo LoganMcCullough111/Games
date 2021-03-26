@@ -14,7 +14,27 @@ footer h5 {
     text-align: center;
 }
 
+/*Make the h1 element in the header act like an inline element*/
+header h1{
+    display: inline;
+}
+
 /*Eliminate the margins around the <h1> element and the <body> element.*/
 header h1, body {
     margin: 0;
+}
+
+/*Styles for widgets in page header*/
+.Widget {
+    float: right;
+    height: 40px;
+    width: 7em;
+    text-align: center;
+}
+
+.Widget p {
+    vertical-align: bottom;
+}
+a {
+    color: white;
 }
