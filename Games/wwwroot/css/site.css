@@ -3,6 +3,7 @@ header {
     background-color: blue;
     color: white;
     border: 0;
+    padding: 10px;
 }
 
 footer {
@@ -11,4 +12,9 @@ footer {
 
 footer h5 {
     text-align: center;
+}
+
+/*Eliminate the margins around the <h1> element and the <body> element.*/
+header h1, body {
+    margin: 0;
 }
