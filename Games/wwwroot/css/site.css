@@ -1,1 +1,14 @@
-﻿
+﻿/*Basic Style info for the header and footer elements*/
+header {
+    background-color: blue;
+    color: white;
+    border: 0;
+}
+
+footer {
+    background-color: rgb(230, 230, 230);
+}
+
+footer h5 {
+    text-align: center;
+}
