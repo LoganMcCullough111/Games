@@ -15,6 +15,7 @@ function vStartSignIn(eventData) {
  div element into the page displays the overlay*/
 function eltCreateOverlay(eltOverlayContent) {
     let divOverlay = document.createElement("div");
+    divOverlay.className = "Overlay";
     divOverlay.appendChild(eltOverlayContent);
     return divOverlay;
 }
