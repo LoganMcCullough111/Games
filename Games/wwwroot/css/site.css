@@ -35,7 +35,7 @@ header h1, body {
 .Widget p {
     vertical-align: bottom;
 }
-a {
+header a {
     color: white;
 }
 
@@ -49,4 +49,27 @@ a {
     height: 100%;
     z-index:1000;
     background-color: rgba(120,120,120, 0.5);
+}
+
+/*The main sign in box */
+section.SignIn {
+    margin: 15% auto auto auto;
+    padding: 20px;
+    background-color: white;
+    width: fit-content;
+}
+
+/*Center the sign in buttons inside their div.*/
+div.CenterButtons {
+    text-align: center;
+}
+
+div.CenterButtons button {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/*Center the text for creating an account*/
+td.SignIn {
+    text-align: center;
 }
