@@ -15,6 +15,8 @@ function vStartSignIn(eventData) {
  div element into the page displays the overlay*/
 function eltCreateOverlay(eltOverlayContent) {
     let divOverlay = document.createElement("div");
+    //Risky. Give an element an id in JS
+    divOverlay.setAttribute("id", "divOverlay");
     divOverlay.className = "Overlay";
     divOverlay.appendChild(eltOverlayContent);
     return divOverlay;
@@ -71,6 +73,8 @@ function eltCreateSignin() {
     let txtClickHere = document.createTextNode("Click here");
     let aClickHere = document.createElement("a");
     aClickHere.setAttribute("href", "");
+    //Set the "onclick" event handler.
+    aClickHere.onclick = vShowCreateAccount;
     aClickHere.appendChild(txtClickHere);
     let txtToCreateOne = document.createTextNode(" to create one!");
     let tdCreateAccount = document.createElement("td");
@@ -140,10 +144,14 @@ function eltCreateAccount() {
     let txtCreate = document.createTextNode("Create Account");
     let btnCreate = document.createElement("button");
     btnCreate.setAttribute("type", "button");
+    //Set event handler for clicking on the Create Account button
+    btnCreate.onclick = vDoCreateAccount;
     btnCreate.appendChild(txtCreate);
     let txtCancel = document.createTextNode("Cancel");
     let btnCancel = document.createElement("button");
     btnCancel.setAttribute("type", "button");
+    //Set event handler for clicking the cancel button
+    btnCancel.onclick = vCancelCreateAccount;
     btnCancel.appendChild(txtCancel);
     let divButtons = document.createElement("div");
     divButtons.className = "CenterButtons";
@@ -168,4 +176,45 @@ function eltCreateAccount() {
     secSignin.appendChild(tblSignin);
     //Sign in box built. Return it
     return secSignin;
+}
+/*Function to show the panel for creating a new account*/
+function vShowCreateAccount(eventData) {
+    //Cancel the usual behavior of clicking on a link
+    eventData.preventDefault();
+    //Get the overlay div and replace it's current child (sign in box) with the box for creating a new account.
+    let divOverlay = document.getElementById("divOverlay");
+    //Get the <section> element that is the box for signing in.
+    let secSignIn = divOverlay.firstChild;
+    //Create the box for creating a new account.
+    let secNewAccount = eltCreateAccount();
+    // Replace sign in box with create account box
+    divOverlay.replaceChild(secNewAccount, secSignIn);
+}
+
+/*Function to cancel creating an account, by switching from the create account box back to the sign in box*/
+function vCancelCreateAccount() {
+    //Get the overlay div and replace it's current child (create acc box) with the box for signing in.
+    let divOverlay = document.getElementById("divOverlay");
+    //Get the <section> element that is the box for creating a new account.
+    let secNewAccount = divOverlay.firstChild;
+    //Create the box for signing in.
+    let secSignIn = eltCreateSignin();
+    // Replace create account box with sign in box
+    divOverlay.replaceChild(secSignIn, secNewAccount);
+}
+
+/*Function to create a new account.*/
+function vDoCreateAccount() {
+    //Check to make sure the passwords match.
+    //Get the three input elements (the text boxes) that are inside the overlay div
+    let divOverlay = document.getElementById("divOverlay")
+    let arrInputElts = divOverlay.getElementsByTagName("input");
+    // Numbers 1 and 2 are the two passwords.
+    let strPassword = arrInputElts[1].value;
+    let strRePassword = arrInputElts[2].value;
+    //If passwords do not match, display a message and exit
+    if (strPassword != strRePassword) {
+        alert("Passwords do not match. Please try again.")
+        return;
+    }
 }
