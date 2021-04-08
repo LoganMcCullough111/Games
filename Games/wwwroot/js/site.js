@@ -214,7 +214,45 @@ function vDoCreateAccount() {
     let strRePassword = arrInputElts[2].value;
     //If passwords do not match, display a message and exit
     if (strPassword != strRePassword) {
-        alert("Passwords do not match. Please try again.")
+        alert("Passwords do not match. Please try again.");
         return;
     }
+    //If we get here, then passwords match, so we can send the username and password to the server for storage.
+    let strUsername = arrInputElts[0].value;
+    // Set up the URL and the data to send to the server, so we can use ajax.
+    let strURL = "/Home/CreateAccount";
+    let objUNandPW = { Username: strUsername, Password: strPassword };
+    let strUNandPW = JSON.stringify(objUNandPW);
+    //Call the function to do the Ajax stuff
+    vDoAjax(strURL, strUNandPW, vCreateAcctResponse);
+}
+
+/*Utility function to set up and send an ajax request. Three parameters: 
+strURL: the url to send the request to.
+strData : the data sent with request
+fcnHandleResponse:function that handles
+ the response returned by the server.*/
+function vDoAjax(strURL, strData, fcnHandleResponse) {
+    //Create and configure the XMLHTTPRequest object
+    let xhrRequest = new XMLHttpRequest();
+    xhrRequest.open("POST", strURL);
+    //Set the "Content-Type" header to say that the data we send will be in JSON format
+    xhrRequest.setRequestHeader("Content-Type", "text/json");
+    //Define the function to handle the response
+    xhrRequest.onreadystatechange =
+        function () {
+            if (this.readyState === 4) {
+                if (this.status === 200) {
+                    //Request successful. Response complete. Call the specific function to process the response
+                    fcnHandleResponse(xhrRequest);
+                }
+            }
+        };
+    //Send the request, with the data.
+    xhrRequest.send(strData);
+}
+
+/*Function to handle the response from the server when we send a request to create a new account*/
+function vCreateAcctResponse(xhrRequest) {
+    alert(xhrRequest.responseText);
 }
