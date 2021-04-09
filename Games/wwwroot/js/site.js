@@ -237,7 +237,7 @@ function vDoAjax(strURL, strData, fcnHandleResponse) {
     let xhrRequest = new XMLHttpRequest();
     xhrRequest.open("POST", strURL);
     //Set the "Content-Type" header to say that the data we send will be in JSON format
-    xhrRequest.setRequestHeader("Content-Type", "text/json");
+    xhrRequest.setRequestHeader("Content-Type", "application/json")
     //Define the function to handle the response
     xhrRequest.onreadystatechange =
         function () {

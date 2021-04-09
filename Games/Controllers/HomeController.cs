@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Games.Objects;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Games.Controllers
 {
@@ -21,6 +24,14 @@ namespace Games.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        //Action method to create a new account
+        public string CreateAccount(Credentials crUNandPW)
+        {
+            //Check whether the proposed username already exists.
+
+            return crUNandPW.Username;
         }
 
         public IActionResult Privacy()

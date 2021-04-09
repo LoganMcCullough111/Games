@@ -17,6 +17,7 @@ namespace Games.Models.LowLevel
         {
         }
 
+        public virtual DbSet<TCredential> TCredentials { get; set; }
         public virtual DbSet<TGame> TGames { get; set; }
         public virtual DbSet<TGenre> TGenres { get; set; }
         public virtual DbSet<TRating> TRatings { get; set; }
@@ -32,6 +33,23 @@ namespace Games.Models.LowLevel
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TCredential>(entity =>
+            {
+                entity.HasKey(e => e.FUsername);
+
+                entity.ToTable("tCredentials");
+
+                entity.Property(e => e.FUsername).HasColumnName("fUsername");
+
+                entity.Property(e => e.FHash)
+                    .IsRequired()
+                    .HasColumnName("fHash");
+
+                entity.Property(e => e.FSalt)
+                    .IsRequired()
+                    .HasColumnName("fSalt");
+            });
+
             modelBuilder.Entity<TGame>(entity =>
             {
                 entity.HasKey(e => e.FGameId);
