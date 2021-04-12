@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Games.Objects;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Games.Models.HighLevel;
 
 namespace Games.Controllers
 {
@@ -26,12 +27,23 @@ namespace Games.Controllers
             return View();
         }
 
-        //Action method to create a new account
-        public string CreateAccount(Credentials crUNandPW)
+        //Action method to create a new account. Returns JSON status value:
+        //0-Success
+        //1-Failure (because the username already exists
+        public string CreateAccount([FromBody] Credentials crUNandPW)
         {
             //Check whether the proposed username already exists.
-
-            return crUNandPW.Username;
+            string strUsername = crUNandPW.Username;
+            string strPassword = crUNandPW.Password;
+            if (Functions.UsernameExists(strUsername))
+            {
+                //Return an error status telling that the username is already taken.
+                return "{ \"Status\": 1 }";
+            }
+            //If we get here, the username is not taken and we can create the account.
+            Functions.CreateAccount(strUsername, strPassword);
+            //Return success
+            return "{ \"Status\": 0 }";
         }
 
         public IActionResult Privacy()
