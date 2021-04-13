@@ -38,12 +38,12 @@ namespace Games.Controllers
             if (Functions.UsernameExists(strUsername))
             {
                 //Return an error status telling that the username is already taken.
-                return "{ \"Status\": 1 }";
+                return $"{{ \"Status\": 1, \"Name\": \"{strUsername}\" }}";
             }
             //If we get here, the username is not taken and we can create the account.
             Functions.CreateAccount(strUsername, strPassword);
             //Return success
-            return "{ \"Status\": 0 }";
+            return $"{{ \"Status\": 0, \"Name\": \"{strUsername}\"}}";
         }
 
         public IActionResult Privacy()

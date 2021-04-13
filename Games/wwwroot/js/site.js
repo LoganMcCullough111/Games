@@ -254,5 +254,54 @@ function vDoAjax(strURL, strData, fcnHandleResponse) {
 
 /*Function to handle the response from the server when we send a request to create a new account*/
 function vCreateAcctResponse(xhrRequest) {
-    alert(xhrRequest.responseText);
+    //Parse the response text from JSON into javascript object
+    let objResponse = JSON.parse(xhrRequest.responseText);
+    let divOverlay = document.getElementById("divOverlay");
+    //Check the status code returned in the response body
+    if (objResponse.Status === 0) {
+        // Remove overlay
+        let eltBody = divOverlay.parentNode;
+        eltBody.removeChild(divOverlay);
+        //Replace the sign in link inside the sign in widget with a drop down list.
+        let wdgSignIn = document.getElementById("wgtSignIn");
+        let aSignInLink = wdgSignIn.getElementsByTagName("a")[0];
+        let pSignInPar = aSignInLink.parentNode;
+        let selSelect = eltCreateDropDown();
+        pSignInPar.replaceChild(selSelect, aSignInLink);
+    } else {
+        alert(`The username "${objResponse.Name}" is already taken. Please choose a new username.`);
+        // Select the text in the username text box and move focus
+        let arrInputs = divOverlay.getElementsByTagName("input");
+        let inpUsername = arrInputs[0];
+        inpUsername.select();
+        inpUsername.focus();
+    }
+}
+
+/*Function to build the drop down list that replaces the sign in link when a new account is successfully created or the user
+ successfully signs in. */
+function eltCreateDropDown() {
+    //Create 2 option elements
+    let optProfile = eltCreateOption("Profile", "0");
+    let optSignOut = eltCreateOption("Sign Out", "1");
+    //Create the select element and append options
+    let selSelect = document.createElement("select");
+    selSelect.appendChild(optProfile);
+    selSelect.appendChild(optSignOut);
+    //Return the select element
+    return selSelect;
+}
+
+/*Function to create an <option> element for a drop down list 2 parameters:
+ strDisplay - The string that is displayed in the drop-down list
+ strValue - The value of the "value" attribute in the <option> start tag */
+function eltCreateOption(strDisplay, strValue) {
+    //Create text node for display
+    let txtDisplay = document.createTextNode(strDisplay);
+    //Create the option element and put in the attribute and text.
+    let optOption = document.createElement("option");
+    optOption.setAttribute("value", strValue);
+    optOption.appendChild(txtDisplay);
+    //Return option element
+    return optOption;
 }
