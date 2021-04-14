@@ -10,11 +10,18 @@ using Games.Objects;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Games.Models.HighLevel;
+using Microsoft.AspNetCore.Http;
 
 namespace Games.Controllers
 {
     public class HomeController : Controller
     {
+        private const int TrueAsInt = 1;
+        private const int FalseAsInt = 0;
+        private const string SignedInName = "SignedIn?";
+        private const string UsernameName = "Username";
+        private const string CartName = "Cart";
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -24,6 +31,10 @@ namespace Games.Controllers
 
         public IActionResult Index()
         {
+            //Set up basic session values: User is not signed in, and has no username set.
+            HttpContext.Session.SetInt32(SignedInName, FalseAsInt);
+            HttpContext.Session.SetString(UsernameName, "");
+            HttpContext.Session.SetString(CartName, "[]");
             return View();
         }
 
@@ -42,6 +53,9 @@ namespace Games.Controllers
             }
             //If we get here, the username is not taken and we can create the account.
             Functions.CreateAccount(strUsername, strPassword);
+            //Account created. Mark the user as signed in and store their username in a session variable
+            HttpContext.Session.SetInt32(SignedInName, TrueAsInt);
+            HttpContext.Session.SetString(UsernameName, strUsername);
             //Return success
             return $"{{ \"Status\": 0, \"Name\": \"{strUsername}\"}}";
         }

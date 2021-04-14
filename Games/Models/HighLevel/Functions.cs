@@ -36,10 +36,10 @@ namespace Games.Models.HighLevel {
             // Insert the info into the DB.
             using (GamesContext dbContext = new GamesContext()) {
                 //New row to insert is an instance of "TCredential". Create instance.
-                TCredential tcNewRow = new TCredential() { FUsername = strUsername, FSalt = salt, FHash = hash };
+                TCredential tcNewRow = new TCredential() { FUsername = strUsername, FSalt = salt, FHash = hash, FCart = "[]" };
                 // Insert into local table "TCredentials".
                 dbContext.TCredentials.Add(tcNewRow);
-                //Commit the change (added row) to DB
+                //Commit the change (added row) to DB.
                 dbContext.SaveChanges();
             }
         }

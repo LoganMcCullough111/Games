@@ -41,6 +41,10 @@ namespace Games.Models.LowLevel
 
                 entity.Property(e => e.FUsername).HasColumnName("fUsername");
 
+                entity.Property(e => e.FCart)
+                    .IsRequired()
+                    .HasColumnName("fCart");
+
                 entity.Property(e => e.FHash)
                     .IsRequired()
                     .HasColumnName("fHash");
