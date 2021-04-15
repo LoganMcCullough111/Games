@@ -12,4 +12,15 @@ public class Credentials
         public string Username { get; set; }
         public string Password { get; set; }
     }
+
+    //A class for the game information, displayed on the page
+    public class GameInfo
+    {
+        //Properties for the Game ID, title, description, publisher, price
+        public long ID { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Publisher { get; set; }
+        public double Price { get; set; }
+    }
 }

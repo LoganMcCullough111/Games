@@ -73,3 +73,9 @@ div.CenterButtons button {
 td.SignIn {
     text-align: center;
 }
+
+/*Center the table of game info on the page*/
+table.GameInfo {
+    margin-left:auto;
+    margin-right:auto;
+}

@@ -35,7 +35,9 @@ namespace Games.Controllers
             HttpContext.Session.SetInt32(SignedInName, FalseAsInt);
             HttpContext.Session.SetString(UsernameName, "");
             HttpContext.Session.SetString(CartName, "[]");
-            return View();
+            //Get a list of all of the games in the database
+            List<GameInfo> lstAllGames = Functions.GetAllGames();
+            return View(lstAllGames);
         }
 
         //Action method to create a new account. Returns JSON status value:

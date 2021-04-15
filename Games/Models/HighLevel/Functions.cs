@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Games.Models.LowLevel;
 using System.Security.Cryptography;
 using System.Text;
+using Games.Objects;
 
 /*File for high-level functions that interact with the low-model.*/
 
@@ -56,6 +57,21 @@ namespace Games.Models.HighLevel {
             SHA512Managed shamHash = new SHA512Managed();
             byte[] hash = shamHash.ComputeHash(bySaltedPW);
             return hash;
+        }
+
+        //A function to get a list of all the games in the DB, listed alphabetically by title
+        public static List<GameInfo> GetAllGames()
+        {
+            //run query on db
+            using(GamesContext dbContext = new GamesContext())
+            {
+                var gameList =
+                    from game in dbContext.TGames
+                    orderby game.FTitle
+                    select new GameInfo {ID = game.FGameId, Title = game.FTitle, Description = game.FDescription,
+                                         Publisher = game.FPublisher, Price = game.FPrice};
+                return gameList.ToList();
+            }
         }
     }
 }
