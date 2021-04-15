@@ -305,3 +305,14 @@ function eltCreateOption(strDisplay, strValue) {
     //Return option element
     return optOption;
 }
+
+/*Function to add a game to the user's cart. The first parameter is a reference to the button clicked and the second is the id
+ of the game chosen*/
+function AddToCart(eltButton, iGameID) {
+    //Get the quantity chosen.
+    let eltTr = eltButton.parentNode.parentNode;
+    let eltNumber = eltTr.getElementsByTagName("input")[0];
+    let iQuantity = eltNumber.value;
+    //set quantity back to 0
+    eltNumber.value = 0;
+}
