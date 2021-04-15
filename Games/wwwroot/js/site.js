@@ -53,6 +53,7 @@ function eltCreateSignin() {
     let txtSignIn = document.createTextNode("Sign In");
     let btnSignIn = document.createElement("button");
     btnSignIn.setAttribute("type", "button");
+    btnSignIn.onclick = vDoSignIn;
     btnSignIn.appendChild(txtSignIn);
     let txtCancel = document.createTextNode("Cancel");
     let btnCancel = document.createElement("button");
@@ -311,4 +312,46 @@ function vCancelSignIn() {
     let divOverlay = document.getElementById("divOverlay");
     let bdyPageBody = document.getElementsByTagName("body")[0];
     bdyPageBody.removeChild(divOverlay);
+}
+
+function vDoSignIn() {
+    let divOverlay = document.getElementById("divOverlay");
+    let arrInputElts = divOverlay.getElementsByTagName("input");
+    let strUsername = arrInputElts[0].value;
+    let strPassword = arrInputElts[1].value;
+    let strURL = "Home/SignIn";
+    let objUNandPW = { Username: strUsername, Password: strPassword };
+    let strUNandPW = JSON.stringify(objUNandPW);
+    vDoAjax(strURL, strUNandPW, vSignInResponse);
+}
+
+function vSignInResponse(xhrRequest) {
+    let objResponse = JSON.parse(xhrRequest.responseText);
+    let divOverlay = document.getElementById("divOverlay");
+    if (objResponse.Status === 0) {
+        let eltBody = divOverlay.parentNode;
+        eltBody.removeChild(divOverlay);
+        let wdgSignIn = document.getElementById("wgtSignIn");
+        let aSignInLink = wdgSignIn.getElementsByTagName("a")[0];
+        let pSignInPar = aSignInLink.parentNode;
+        let selSelect = eltCreateDropDown();
+        pSignInPar.replaceChild(selSelect, aSignInLink);
+    }
+    else if (objResponse.Status === 1) {
+        alert("The entered password is incorrect.");
+        // Select the text in the username text box and move focus
+        let arrInputs = divOverlay.getElementsByTagName("input");
+        let inpUsername = arrInputs[0];
+        inpUsername.select();
+        inpUsername.focus();
+    }
+    else {
+        alert("The entered username does not exist.");
+        // Select the text in the username text box and move focus
+        let arrInputs = divOverlay.getElementsByTagName("input");
+        let inpUsername = arrInputs[0];
+        inpUsername.select();
+        inpUsername.focus();
+    }
+
 }

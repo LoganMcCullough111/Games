@@ -57,5 +57,44 @@ namespace Games.Models.HighLevel {
             byte[] hash = shamHash.ComputeHash(bySaltedPW);
             return hash;
         }
+
+        public static bool CheckCredentials(string strUsername, string strPassword)
+        {
+            byte[] salt = GetSaltValue(strUsername);
+            byte[] EnteredHash = ComputeHash(salt, strPassword);
+            byte[] StoredHash = GetHashValue(strUsername);
+            if(EnteredHash.Length == StoredHash.Length) {
+                for(int i = 0; i < StoredHash.Length; i++) {
+                    if(EnteredHash[i] != StoredHash[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+       
+        public static byte[] GetSaltValue(string strUsername)
+        {
+            using (GamesContext dbContext = new GamesContext())
+            {
+                var salts =
+                    from saltvalue in dbContext.TCredentials
+                    where saltvalue.FUsername == strUsername
+                    select saltvalue.FSalt;
+                return salts.First();
+            }
+        }
+        public static byte[] GetHashValue(string strUsername)
+        {
+            using (GamesContext dbContext = new GamesContext())
+            {
+                var hash =
+                    from hashvalue in dbContext.TCredentials
+                    where hashvalue.FUsername == strUsername
+                    select hashvalue.FHash;
+                return hash.First();
+            }
+        }
     }
 }
