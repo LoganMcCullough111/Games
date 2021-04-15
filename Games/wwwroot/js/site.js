@@ -57,6 +57,7 @@ function eltCreateSignin() {
     let txtCancel = document.createTextNode("Cancel");
     let btnCancel = document.createElement("button");
     btnCancel.setAttribute("type", "button");
+    btnCancel.onclick = vCancelSignIn;
     btnCancel.appendChild(txtCancel);
     let divButtons = document.createElement("div");
     divButtons.className = "CenterButtons";
@@ -304,4 +305,10 @@ function eltCreateOption(strDisplay, strValue) {
     optOption.appendChild(txtDisplay);
     //Return option element
     return optOption;
+}
+
+function vCancelSignIn() {
+    let divOverlay = document.getElementById("divOverlay");
+    let bdyPageBody = document.getElementsByTagName("body")[0];
+    bdyPageBody.removeChild(divOverlay);
 }
