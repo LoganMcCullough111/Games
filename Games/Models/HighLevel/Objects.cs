@@ -23,4 +23,12 @@ public class Credentials
         public string Publisher { get; set; }
         public double Price { get; set; }
     }
+
+    //A class for the information on an item in the cart
+    public class CartItem
+    {
+        //properties for the game ID (in DB) and quantity
+        public long GameID { get; set; }
+        public int Quantity { get; set; }
+    }
 }

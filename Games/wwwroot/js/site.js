@@ -308,11 +308,25 @@ function eltCreateOption(strDisplay, strValue) {
 
 /*Function to add a game to the user's cart. The first parameter is a reference to the button clicked and the second is the id
  of the game chosen*/
-function AddToCart(eltButton, iGameID) {
+function vAddToCart(eltButton, iGameID) {
     //Get the quantity chosen.
     let eltTr = eltButton.parentNode.parentNode;
     let eltNumber = eltTr.getElementsByTagName("input")[0];
     let iQuantity = eltNumber.value;
     //set quantity back to 0
     eltNumber.value = 0;
+    //Use ajax to send the new item for the users cart to the server for storage
+    let objNewItem = { GameID: iGameID, Quantity: iQuantity };
+    let strNewItem = JSON.stringify(objNewItem);
+    let strURL = "/Home/AddToCart";
+    vDoAjax(strURL, strNewItem, vAddToCartResponse);
+}
+
+//Function to handle the response from the server after adding a new item to the cart
+function vAddToCartResponse(xhrRequest) {
+    alert(xhrRequest.responseText);
+    //Update the number of items in the cart widget on the page
+    let eltCartSpan = document.getElementById("NumOfItems");
+    let objResponse = JSON.parse(xhrRequest.responseText);
+    eltCartSpan.innerHTML = objResponse.NumInCart;
 }

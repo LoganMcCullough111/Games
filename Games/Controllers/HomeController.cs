@@ -62,6 +62,21 @@ namespace Games.Controllers
             return $"{{ \"Status\": 0, \"Name\": \"{strUsername}\"}}";
         }
 
+        //Action method for adding an item to the cart
+        public string AddToCart([FromBody] CartItem ciNewItem) {
+            //Get the current shopping cart contents from the session variable
+            string strCurrCart = HttpContext.Session.GetString(CartName);
+            //Convert from JSON string into a list of CartItems
+            List<CartItem> lstCurrCart = JsonSerializer.Deserialize<List<CartItem>>(strCurrCart);
+            //Add the new item to the cart
+            lstCurrCart.Add(ciNewItem);
+            //Convert back to json and store in session variable
+            strCurrCart = JsonSerializer.Serialize(lstCurrCart);
+            HttpContext.Session.SetString(CartName, strCurrCart);
+            //Test: return json string for cart
+            return $"{{\"NumInCart\": {lstCurrCart.Count()} }}";
+        }
+
         public IActionResult Privacy()
         {
             return View();
