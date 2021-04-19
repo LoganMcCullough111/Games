@@ -312,7 +312,7 @@ function vAddToCart(eltButton, iGameID) {
     //Get the quantity chosen.
     let eltTr = eltButton.parentNode.parentNode;
     let eltNumber = eltTr.getElementsByTagName("input")[0];
-    let iQuantity = eltNumber.value;
+    let iQuantity = parseInt(eltNumber.value);
     //set quantity back to 0
     eltNumber.value = 0;
     //Use ajax to send the new item for the users cart to the server for storage

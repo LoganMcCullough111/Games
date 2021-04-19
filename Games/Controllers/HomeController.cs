@@ -74,7 +74,7 @@ namespace Games.Controllers
             strCurrCart = JsonSerializer.Serialize(lstCurrCart);
             HttpContext.Session.SetString(CartName, strCurrCart);
             //Test: return json string for cart
-            return $"{{\"NumInCart\": {lstCurrCart.Count()} }}";
+            return $"{{\"NumInCart\": {lstCurrCart.Count()}, \"Cart\": {strCurrCart} }}";
         }
 
         public IActionResult Privacy()
