@@ -27,7 +27,7 @@ namespace Games.Models.HighLevel {
         }
 
         //Create an account assuming we have already checked that the requested username is available
-        public static void CreateAccount(string strUsername, string strPassword) {
+        public static void CreateAccount(string strUsername, string strPassword, string strCart) {
             //Create a random salt value, and combine it with the password, then compute the hash value.
             RNGCryptoServiceProvider rngCrypto = new RNGCryptoServiceProvider();
             byte[] salt = new byte[32];
@@ -37,7 +37,7 @@ namespace Games.Models.HighLevel {
             // Insert the info into the DB.
             using (GamesContext dbContext = new GamesContext()) {
                 //New row to insert is an instance of "TCredential". Create instance.
-                TCredential tcNewRow = new TCredential() { FUsername = strUsername, FSalt = salt, FHash = hash, FCart = "[]" };
+                TCredential tcNewRow = new TCredential() { FUsername = strUsername, FSalt = salt, FHash = hash, FCart = strCart};
                 // Insert into local table "TCredentials".
                 dbContext.TCredentials.Add(tcNewRow);
                 //Commit the change (added row) to DB.
@@ -71,6 +71,24 @@ namespace Games.Models.HighLevel {
                     select new GameInfo {ID = game.FGameId, Title = game.FTitle, Description = game.FDescription,
                                          Publisher = game.FPublisher, Price = game.FPrice};
                 return gameList.ToList();
+            }
+        }
+
+        //Function to update the current cart in the DB for a user
+        public static void UpdateCart(string strUsername, string strCart)
+        {
+            //Update data in database
+            using (GamesContext dbContext = new GamesContext())
+            {
+                //Run a query to get the row we want to update
+                var users = from user in dbContext.TCredentials
+                            where user.FUsername == strUsername
+                            select user;
+                // There is only one row in results returned. Get it and modify its FCart property.
+                TCredential tcCurrUser = users.First();
+                tcCurrUser.FCart = strCart;
+                //Save the change.
+                dbContext.SaveChanges();
             }
         }
     }

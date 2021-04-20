@@ -31,13 +31,30 @@ namespace Games.Controllers
 
         public IActionResult Index()
         {
-            //Set up basic session values: User is not signed in, and has no username set.
-            HttpContext.Session.SetInt32(SignedInName, FalseAsInt);
-            HttpContext.Session.SetString(UsernameName, "");
-            HttpContext.Session.SetString(CartName, "[]");
+            //The number of items in the cart.
+            int iNumCartItems = 0;
+            //Check whether we are continuing an existing session.
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(CartName)))
+            {
+                //Cart is null or empty. Therefore we are starting a new session.
+                //Set up basic session values: User is not signed in, and has no username set, and has an empty cart..
+                HttpContext.Session.SetInt32(SignedInName, FalseAsInt);
+                HttpContext.Session.SetString(UsernameName, "");
+                HttpContext.Session.SetString(CartName, "[]");
+            }
+            else
+            {
+                //Continuing an existing session. Get the cart and determine its length.
+                //Get the current shopping cart contents from the session variable
+                string strCurrCart = HttpContext.Session.GetString(CartName);
+                //Convert from JSON string into a list of CartItems
+                List<CartItem> lstCurrCart = JsonSerializer.Deserialize<List<CartItem>>(strCurrCart);
+                iNumCartItems = lstCurrCart.Count();
+
+            }
             //Get a list of all of the games in the database
             List<GameInfo> lstAllGames = Functions.GetAllGames();
-            return View(lstAllGames);
+            return View((lstAllGames, iNumCartItems));
         }
 
         //Action method to create a new account. Returns JSON status value:
@@ -53,8 +70,10 @@ namespace Games.Controllers
                 //Return an error status telling that the username is already taken.
                 return $"{{ \"Status\": 1, \"Name\": \"{strUsername}\" }}";
             }
-            //If we get here, the username is not taken and we can create the account.
-            Functions.CreateAccount(strUsername, strPassword);
+            //If we get here, the username is not taken and we can create the account. We must get the current shopping cart from the
+            //session and store it.
+            string strCurrCart = HttpContext.Session.GetString(CartName);
+            Functions.CreateAccount(strUsername, strPassword, strCurrCart);
             //Account created. Mark the user as signed in and store their username in a session variable
             HttpContext.Session.SetInt32(SignedInName, TrueAsInt);
             HttpContext.Session.SetString(UsernameName, strUsername);
@@ -73,6 +92,13 @@ namespace Games.Controllers
             //Convert back to json and store in session variable
             strCurrCart = JsonSerializer.Serialize(lstCurrCart);
             HttpContext.Session.SetString(CartName, strCurrCart);
+            //If the user is signed in, we must update his or her cart info in the DB.
+            if(HttpContext.Session.GetInt32(SignedInName) == TrueAsInt)
+            {
+                //Get the username so we can look up the user in the DB
+                string strUsername = HttpContext.Session.GetString(UsernameName);
+                Functions.UpdateCart(strUsername, strCurrCart);
+            }
             //Test: return json string for cart
             return $"{{\"NumInCart\": {lstCurrCart.Count()}, \"Cart\": {strCurrCart} }}";
         }

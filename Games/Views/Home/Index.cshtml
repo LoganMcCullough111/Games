@@ -1,5 +1,5 @@
 ﻿@using Games.Objects;
-@model List<GameInfo> 
+@model (List<GameInfo>, int)
 
 <table class="GameInfo">
     <thead>
@@ -12,7 +12,7 @@
             <th>&nbsp;</th>
         </tr>
     </thead>
-    @foreach(GameInfo giGame in Model)
+    @foreach(GameInfo giGame in Model.Item1)
      {
         <tr>
             <td>@giGame.Title</td>

@@ -313,18 +313,22 @@ function vAddToCart(eltButton, iGameID) {
     let eltTr = eltButton.parentNode.parentNode;
     let eltNumber = eltTr.getElementsByTagName("input")[0];
     let iQuantity = parseInt(eltNumber.value);
-    //set quantity back to 0
-    eltNumber.value = 0;
-    //Use ajax to send the new item for the users cart to the server for storage
-    let objNewItem = { GameID: iGameID, Quantity: iQuantity };
-    let strNewItem = JSON.stringify(objNewItem);
-    let strURL = "/Home/AddToCart";
-    vDoAjax(strURL, strNewItem, vAddToCartResponse);
+    //Only add to cart of Quantity is > 0
+    if (iQuantity > 0) {
+        //set quantity back to 0
+        eltNumber.value = 0;
+        //Use ajax to send the new item for the users cart to the server for storage
+        let objNewItem = { GameID: iGameID, Quantity: iQuantity };
+        let strNewItem = JSON.stringify(objNewItem);
+        let strURL = "/Home/AddToCart";
+        vDoAjax(strURL, strNewItem, vAddToCartResponse);
+    } else {
+        alert("Item not added to cart: quantity is zero.")
+    }
 }
 
 //Function to handle the response from the server after adding a new item to the cart
 function vAddToCartResponse(xhrRequest) {
-    alert(xhrRequest.responseText);
     //Update the number of items in the cart widget on the page
     let eltCartSpan = document.getElementById("NumOfItems");
     let objResponse = JSON.parse(xhrRequest.responseText);
