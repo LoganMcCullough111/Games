@@ -81,6 +81,27 @@ namespace Games.Controllers
             return $"{{ \"Status\": 0, \"Name\": \"{strUsername}\"}}";
         }
 
+        public string SignIn([FromBody] Credentials crUNandPW)
+        {
+            string strUsername = crUNandPW.Username;
+            string strPassword = crUNandPW.Password;
+            if (Functions.UsernameExists(strUsername)) {
+                //Username exists, check credentials
+                if (Functions.CheckCredentials(strUsername, strPassword)) {
+                    //Credentials good
+                    return $"{{ \"Status\": 0, \"Name\": \"{strUsername}\"}}";
+                }
+                else {
+                    //Username exists, but password isn't correct
+                    return $"{{ \"Status\": 1, \"Name\": \"{strUsername}\"}}";
+                }
+            }
+            else {
+                //Username doesn't exist
+                return $"{{ \"Status\": 2, \"Name\": \"{strUsername}\"}}";
+            }
+        }
+
         //Action method for adding an item to the cart
         public string AddToCart([FromBody] CartItem ciNewItem) {
             //Get the current shopping cart contents from the session variable
