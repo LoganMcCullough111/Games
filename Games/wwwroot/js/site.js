@@ -337,6 +337,8 @@ function vSignInResponse(xhrRequest) {
         let pSignInPar = aSignInLink.parentNode;
         let selSelect = eltCreateDropDown();
         pSignInPar.replaceChild(selSelect, aSignInLink);
+        let eltCartSpan = document.getElementById("NumOfItems");
+        eltCartSpan.innerHTML = objResponse.NumInCart;
     }
     else if (objResponse.Status === 1) {
         alert("The entered password is incorrect.");
@@ -386,6 +388,11 @@ function vAddToCartResponse(xhrRequest) {
 }
 
 function vSignOut() {
+    let strURI = "/Home/SignUserOut"
+    vDoAjax(strURI, null, vSignOutResponse);
+}
+
+function vSignOutResponse() {
     let eltCartSpan = document.getElementById("NumOfItems");
     eltCartSpan.innerHTML = 0;
     let wdgSignIn = document.getElementById("wgtSignIn");
@@ -394,7 +401,7 @@ function vSignOut() {
     let txtSignIn = document.createTextNode("Sign In");
     let aSignIn = document.createElement("a");
     aSignIn.setAttribute("href", "");
-    aSignIn.setAttribute("onclick","vStartSignIn(arguments[0])");
+    aSignIn.setAttribute("onclick", "vStartSignIn(arguments[0])");
     aSignIn.appendChild(txtSignIn);
     DropDownPar.replaceChild(aSignIn, selDropDown);
 }

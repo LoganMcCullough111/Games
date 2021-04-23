@@ -93,8 +93,9 @@ namespace Games.Controllers
                     HttpContext.Session.SetString(UsernameName, strUsername);
                     string strUserCart = Functions.UserCart(strUsername);
                     HttpContext.Session.SetString(CartName, strUserCart);
-                    //Cart Num 
-                    return $"{{ \"Status\": 0, \"Name\": \"{strUsername}\"}}";
+                    List<CartItem> lstCurrCart = JsonSerializer.Deserialize<List<CartItem>>(strUserCart);
+
+                    return $"{{ \"Status\": 0, \"NumInCart\": \"{lstCurrCart.Count()}\"}}";
                 }
                 else {
                     //Username exists, but password isn't correct
@@ -129,6 +130,12 @@ namespace Games.Controllers
             return $"{{\"NumInCart\": {lstCurrCart.Count()}, \"Cart\": {strCurrCart} }}";
         }
 
+        public void SignUserOut()
+        {
+            HttpContext.Session.SetInt32(SignedInName, FalseAsInt);
+            HttpContext.Session.SetString(UsernameName, "");
+            HttpContext.Session.SetString(CartName, "[]");
+        }
         public IActionResult Privacy()
         {
             return View();
