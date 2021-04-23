@@ -288,6 +288,7 @@ function eltCreateDropDown() {
     let optSignOut = eltCreateOption("Sign Out", "1");
     //Create the select element and append options
     let selSelect = document.createElement("select");
+    selSelect.onchange = vSignOut;
     selSelect.appendChild(optProfile);
     selSelect.appendChild(optSignOut);
     //Return the select element
@@ -353,8 +354,6 @@ function vSignInResponse(xhrRequest) {
         inpUsername.select();
         inpUsername.focus();
     }
-
-}
 }
 
 /*Function to add a game to the user's cart. The first parameter is a reference to the button clicked and the second is the id
@@ -384,4 +383,18 @@ function vAddToCartResponse(xhrRequest) {
     let eltCartSpan = document.getElementById("NumOfItems");
     let objResponse = JSON.parse(xhrRequest.responseText);
     eltCartSpan.innerHTML = objResponse.NumInCart;
+}
+
+function vSignOut() {
+    let eltCartSpan = document.getElementById("NumOfItems");
+    eltCartSpan.innerHTML = 0;
+    let wdgSignIn = document.getElementById("wgtSignIn");
+    let selDropDown = wdgSignIn.getElementsByTagName("select")[0];
+    let DropDownPar = selDropDown.parentNode;
+    let txtSignIn = document.createTextNode("Sign In");
+    let aSignIn = document.createElement("a");
+    aSignIn.setAttribute("href", "");
+    aSignIn.setAttribute("onclick","vStartSignIn(arguments[0])");
+    aSignIn.appendChild(txtSignIn);
+    DropDownPar.replaceChild(aSignIn, selDropDown);
 }

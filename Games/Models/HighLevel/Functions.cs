@@ -130,5 +130,17 @@ namespace Games.Models.HighLevel {
                 return hash.First();
             }
         }
+
+        public static string UserCart(string strUsername)
+        {
+            using (GamesContext dbContext = new GamesContext())
+            {
+                var usercart =
+                    from cart in dbContext.TCredentials
+                    where cart.FUsername == strUsername
+                    select cart.FCart;
+                return usercart.First();
+            }
+        }
     }
 }

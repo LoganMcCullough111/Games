@@ -89,6 +89,11 @@ namespace Games.Controllers
                 //Username exists, check credentials
                 if (Functions.CheckCredentials(strUsername, strPassword)) {
                     //Credentials good
+                    HttpContext.Session.SetInt32(SignedInName, TrueAsInt);
+                    HttpContext.Session.SetString(UsernameName, strUsername);
+                    string strUserCart = Functions.UserCart(strUsername);
+                    HttpContext.Session.SetString(CartName, strUserCart);
+                    //Cart Num 
                     return $"{{ \"Status\": 0, \"Name\": \"{strUsername}\"}}";
                 }
                 else {
